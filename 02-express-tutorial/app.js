@@ -1,54 +1,27 @@
-const { readFileSync } = require('fs');
-const http = require('http');
+const express = require('express');
+const app = express();
 
-// get all files
-// const homepage = readFileSync('./index.html');
-const homepage = readFileSync('./navbar-app/index.html');
-const homeStyles = readFileSync('./navbar-app/styles.css');
-const homeLogo = readFileSync('./navbar-app/logo.svg');
-const homeLogic = readFileSync('./navbar-app/browser-app.js');
-
-const server = http.createServer( (req, res) => {
-    // console.log(req.method);
-    console.log(req.url);
-    const url = req.url;
-    // homepage
-    if(url === '/') {
-        res.writeHead(200, {'content-type': 'text/html'}); 
-        res.write(homepage);
-        res.end();
-    }
-    // about page
-    else if(url === '/about') {
-        res.writeHead(200, {'content-type': 'text/html'}); 
-        res.write('<h1>About Page</h1>');
-        res.end();
-    } 
-    // styles
-    else if(url === '/styles.css') {
-        res.writeHead(200, {'content-type': 'text/css'} );
-        res.write(homeStyles);
-        res.end();
-    }
-    // logo
-    else if(url === '/logo.svg') {
-        res.writeHead(200, {'content-type': 'image/svg+xml'}); 
-        res.write(homeLogo);
-        res.end();
-    }
-    // Logic
-    else if(url === '/browser-app.js') {
-        res.writeHead(200, {'content-type': 'text/javascript'});
-        res.write(homeLogic);
-        res.end();
-    }
-    // 404 Error page not found
-    else {
-        res.writeHead(404, {'content-type': 'text/html'}); 
-        res.write('<h1>404 Error Page Not Found !!!!</h1>');
-        res.end();
-    }
-
+app.get('/', (req, res) => {
+    res.status(200).send('<h1>Homepage</h1>');
 })
 
-server.listen(5000);
+app.get('/about', (req, res) => {
+    res.status(200).send('<h1>About</h1>');
+})
+
+app.all('*', (req, res) => {
+    res.status(404).send('<h1>Resource not found</h1>')
+})
+
+app.listen(5000, () => {
+    console.log('Server is listening on port 5000');
+})
+
+// app.get
+// app.post
+// app.put
+// app.delete
+// app.all
+// app.use
+// app.listen
+
